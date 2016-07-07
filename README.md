@@ -12,5 +12,7 @@ sudo apt-get install \
     libxft-dev \
     libxinerama-dev \
     libnm-glib-dev \
-    network-manager-dev
+    network-manager-dev \
+    libi2c-dev \
+    libasound2-dev 
 ```
