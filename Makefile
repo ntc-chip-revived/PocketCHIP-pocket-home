@@ -13,7 +13,9 @@ export PKG_CONFIG_LDFLAGS=$(foreach pkg, $(PKG_CONFIG_PACKAGES), $(shell $(PKG_C
 
 
 all:
-	cd Builds/LinuxMakefile && $(MAKE)
+	cd Builds/LinuxMakefile && \
+	sed -i '2946s/(styleFlags & windowIsSemiTransparent) ? 32 : 24/32/' ../../deps/JUCE/modules/juce_gui_basics/native/juce_linux_Windowing.cpp && \
+	$(MAKE)
 
 clean:
 	cd Builds/LinuxMakefile && $(MAKE) clean
