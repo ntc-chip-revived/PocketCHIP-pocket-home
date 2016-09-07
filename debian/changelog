@@ -1,3 +1,9 @@
+pocket-home (0.0.6) unstable; urgency=low
+
+  * Compatibility fix for framebuffer color depth
+
+ -- Andrew Kurtz <software@nextthing.co>  Wed, 7 Sep 2016 20:05:16 +0000
+
 pocket-home (0.0.5) unstable; urgency=low
 
   * Battery fix
