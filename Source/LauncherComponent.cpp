@@ -1,5 +1,6 @@
 #include "LauncherComponent.h"
 #include "AppsPageComponent.h"
+#include "LibraryPageComponent.h"
 #include "SettingsPageComponent.h"
 #include "PowerPageComponent.h"
 #include "PokeLookAndFeel.h"
@@ -154,10 +155,6 @@ LauncherComponent::LauncherComponent(const var &configJson)
   launchSpinner->setInterceptsMouseClicks(false, false);
   addChildComponent(launchSpinner);
   
-  focusButtonPopup = new ImageComponent("Focus Button Popup");
-  focusButtonPopup->setInterceptsMouseClicks(false, false);
-  addChildComponent(focusButtonPopup);
-  
   // Settings page
   auto settingsPage = new SettingsPageComponent();
   settingsPage->setName("Settings");
@@ -176,6 +173,12 @@ LauncherComponent::LauncherComponent(const var &configJson)
   pages.add(appsPage);
   pagesByName.set("Apps", appsPage);
   
+  // AppGet page
+  auto appLibrary = new LibraryPageComponent();
+  appLibrary->setName("AppLibrary");
+  pages.add(appLibrary);
+  pagesByName.set("AppLibrary", appLibrary);
+  
   // Read config for apps and corner locations
   auto pagesData = configJson["pages"].getArray();
   if (pagesData) {
@@ -183,11 +186,29 @@ LauncherComponent::LauncherComponent(const var &configJson)
       auto name = page["name"].toString();
       if (name == "Apps") {
         
+        // add all items from config to our launch list
         const auto& appButtons = appsPage->createIconsFromJsonArray(page["items"]);
         for (auto button : appButtons) { button->setWantsKeyboardFocus(false); }
-        auto buttonsData = *(page["cornerButtons"].getArray());
         
+        // add all items from config to our install list
+        auto appsFile = assetFile("ntc-apps.json");
+        if (appsFile.exists()) {
+          auto appsJson = JSON::parse(appsFile);
+          if (appsJson) {
+            const auto& appLibBtns = appLibrary->createIconsFromJsonArray(appsJson);
+            for (auto button : appLibBtns) { button->setWantsKeyboardFocus(false); }
+          }
+          else {
+            std::cerr << "Could not parse installable applications list: " << appsFile.getFullPathName() << std::endl;
+          }
+        }
+        else {
+          std::cerr << "Missing installable applications list: " << appsFile.getFullPathName() << std::endl;
+        }
+        
+        // add corner buttons
         // FIXME: is there a better way to slice juce Array<var> ?
+        auto buttonsData = *(page["cornerButtons"].getArray());
         Array<var> topData{};
         Array<var> botData{};
         topData.add(buttonsData[0]);
@@ -266,6 +287,10 @@ void LauncherComponent::hideLaunchSpinner() {
   DBG("Hide launch spinner");
   launchSpinnerTimer.stopTimer();
   launchSpinner->setVisible(false);
+}
+
+void LauncherComponent::openAppLibrary() {
+  getMainStack().pushPage(pagesByName["AppLibrary"], PageStackComponent::kTransitionTranslateHorizontalLeft);
 }
 
 void LauncherComponent::buttonClicked(Button *button) {

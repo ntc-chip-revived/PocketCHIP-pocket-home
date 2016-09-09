@@ -48,11 +48,11 @@ public:
   void checkShowPageNav();
   
   void addAndOwnIcon(const String &name, Component *icon);
-  DrawableButton *createAndOwnIcon(const String &name, const String &iconPath, const String &shell);
-  virtual Array<DrawableButton *> createIconsFromJsonArray(const var &json);
+  AppIconButton* createAndOwnIcon(const String &name, const String &iconPath, const String &shell);
+  virtual Array<AppIconButton*> createIconsFromJsonArray(const var &json);
   
-  void buttonStateChanged(Button*) override {};
-  void buttonClicked(Button *button) override {};
+  void buttonStateChanged(Button* btn) override;
+  void buttonClicked(Button* btn) override {};
   
 private:
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppListComponent)
@@ -63,11 +63,10 @@ public:
   AppsPageComponent(LauncherComponent* launcherComponent);
   ~AppsPageComponent();
   
-  Array<DrawableButton *> createIconsFromJsonArray(const var &json) override;
+  Array<AppIconButton*> createIconsFromJsonArray(const var &json) override;
   
   OwnedArray<ChildProcess> runningApps;
   
-  virtual void buttonStateChanged(Button*) override;
   void buttonClicked(Button *button) override;
   
   void checkRunningApps();
@@ -78,6 +77,7 @@ private:
   using AppRunningMap = HashMap<AppIconButton*, int>;
 
   LauncherComponent* launcherComponent;
+  AppIconButton* appLibraryBtn;
   
   AppRunningMap runningAppsByButton;
   AppCheckTimer runningCheckTimer;
