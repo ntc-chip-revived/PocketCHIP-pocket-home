@@ -1,8 +1,14 @@
+pocket-home (0.0.7) unstable; urgency=low
+
+  * Introduces scaleable layout, fixes multiple pages of apps
+
+ -- Andrew Hay Kurtz <software@nextthing.co>  Fri, 9 Sep 2016 03:33:07 -0700
+
 pocket-home (0.0.6) unstable; urgency=low
 
   * Compatibility fix for framebuffer color depth
 
- -- Andrew Kurtz <software@nextthing.co>  Wed, 7 Sep 2016 20:05:16 +0000
+ -- Andrew Hay Kurtz <software@nextthing.co>  Wed, 7 Sep 2016 20:05:16 +0000
 
 pocket-home (0.0.5) unstable; urgency=low
 
