@@ -63,6 +63,7 @@ DrawableButton *AppListComponent::createAndOwnIcon(const String &name, const Str
 
 void AppListComponent::resized() {
   auto b = getLocalBounds();
+  int btnHeight = PokeLookAndFeel::getButtonHeight();
   
   prevPageBtn->setSize(btnHeight, btnHeight);
   nextPageBtn->setSize(btnHeight, btnHeight);
@@ -132,11 +133,7 @@ AppsPageComponent::~AppsPageComponent() {}
 
 Array<DrawableButton *> AppsPageComponent::createIconsFromJsonArray(const var &json) {
   auto buttons = AppListComponent::createIconsFromJsonArray(json);
-  
-  //// hard coded "virtual" application. Cannot be removed.
-  //appsLibraryBtn = createAndOwnIcon("App Get", "appIcons/update.png", String::empty);
-  //buttons.add(appsLibraryBtn);
-  
+
   checkShowPageNav();
   return buttons;
 }
@@ -197,10 +194,6 @@ void AppsPageComponent::startOrFocusApp(AppIconButton* appButton) {
   }
   
 };
-
-void AppsPageComponent::openAppsLibrary() {
-  launcherComponent->showAppsLibrary();
-}
 
 void AppsPageComponent::checkRunningApps() {
   Array<int> needsRemove{};
@@ -270,9 +263,6 @@ void AppsPageComponent::buttonClicked(Button *button) {
   else if (button == nextPageBtn) {
     grid->showNextPage();
     checkShowPageNav();
-  }
-  else if (button == appsLibraryBtn) {
-    openAppsLibrary();
   }
   else {
     auto appButton = (AppIconButton*)button;

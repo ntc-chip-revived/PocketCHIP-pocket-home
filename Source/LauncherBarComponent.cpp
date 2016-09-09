@@ -1,34 +1,23 @@
 #include "LauncherBarComponent.h"
 #include "Utils.h"
+#include "PokeLookAndFeel.h"
 
 LauncherBarButton::LauncherBarButton(const String &name, const Image &image) : ImageButton(name) {
-  setImages(false, false, true,
+  setImages(false, true, true,
             image, 1.0f, Colours::transparentWhite, // normal
             image, 1.0f, Colours::transparentWhite, // over
             image, 0.5f, Colours::transparentWhite, // down
             0);
 }
 
-void LauncherBarButton::paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown) {
-  //auto bgBounds = Rectangle<int>(0, 0, 1, 1);
-  //fitRectInRect(bgBounds, getLocalBounds(), Justification::centred, false);
-
-  //g.setColour(findColour(TextButton::buttonColourId));
-  //g.fillEllipse(bgBounds.toFloat());
-
-  ImageButton::paintButton(g, isMouseOverButton, isButtonDown);
-}
-
 // FIXME: this should be renamed e.g. CornerButtonsComponent
-LauncherBarComponent::LauncherBarComponent() {
-  //tempIcon = Drawable::createFromImageData(BinaryData::appsIcon_png, BinaryData::appsIcon_pngSize);
-}
+LauncherBarComponent::LauncherBarComponent() {}
 
 LauncherBarComponent::~LauncherBarComponent() {}
 
-void LauncherBarComponent::paint(Graphics &g) {}
-
 void LauncherBarComponent::resized() {
+  int buttonSize = getHeight();
+  
   // +1 to add room for spacer
   int nitems = buttons.size() + 1;
   Component *items[nitems];
@@ -37,6 +26,7 @@ void LauncherBarComponent::resized() {
     int i = 0;
     for (auto button : buttons) {
       items[i++] = button;
+      static_cast<LauncherBarButton*>(button)->imageHeight = buttonSize / 3.f;
     }
   }
   
@@ -45,8 +35,6 @@ void LauncherBarComponent::resized() {
   items[nitems-2] = nullptr;
 
   auto bounds = getLocalBounds();
-//  bounds.reduce(buttonPadding / 2, buttonPadding);
-  int buttonSize = 50;
 
   if (layoutDirty) {
     for (int i = 0; i < nitems; i++) {

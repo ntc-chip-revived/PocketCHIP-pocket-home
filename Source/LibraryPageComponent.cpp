@@ -23,6 +23,7 @@ void LibraryPageComponent::paint(Graphics &g) {
 
 void LibraryPageComponent::resized() {
   AppListComponent::resized();
+  auto btnHeight = PokeLookAndFeel::getButtonHeight();
   
   const auto& b = getLocalBounds();
   auto gridWidth = b.getWidth() - 2*btnHeight;
@@ -30,7 +31,7 @@ void LibraryPageComponent::resized() {
   grid->setSize(gridWidth, gridHeight);
   grid->setBoundsToFit(b.getX(), b.getY(), b.getWidth(), b.getHeight(), Justification::centred, true);
   
-  backButton->setBounds(b.getWidth()-60, b.getY(), 60, b.getHeight());
+  backButton->setBounds(b.getWidth()-btnHeight, b.getY(), btnHeight, b.getHeight());
 }
 
 void LibraryPageComponent::buttonClicked(Button *button) {

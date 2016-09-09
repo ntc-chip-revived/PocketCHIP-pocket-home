@@ -24,14 +24,14 @@ SettingsCategoryButton::SettingsCategoryButton(const String &name)
 
 void SettingsCategoryButton::paintButton(Graphics &g, bool isMouseOverButton, bool isButtonDown) {
   const auto& bounds = pillBounds;
-  float borderThick = 4.0f;
+  float borderThick = pillBounds.getHeight() / 10.f;
   
   g.setColour(Colours::white);
   isButtonDown ? setAlpha(0.5f) : setAlpha(1.0f);
   
   if (isEnabled()) {
     g.drawRoundedRectangle(bounds.getX() + borderThick, bounds.getY() + borderThick,
-                           bounds.getWidth() - 2*borderThick, bounds.getHeight()  - 2*borderThick,
+                           bounds.getWidth() - 2*borderThick, bounds.getHeight() - 2*borderThick,
                            1, borderThick);
   }
   
@@ -43,7 +43,7 @@ void SettingsCategoryButton::paintButton(Graphics &g, bool isMouseOverButton, bo
 }
 
 void SettingsCategoryButton::resized() {
-  pillBounds.setSize(getLocalBounds().getWidth(), 42);
+  pillBounds.setSize(getLocalBounds().getWidth(), getLocalBounds().getHeight());
   fitRectInRect(pillBounds, getLocalBounds(), Justification::centred, false);
 }
 
@@ -69,14 +69,14 @@ void SettingsCategoryItemComponent::resized() {
   auto b = getLocalBounds();
   auto h = b.getHeight();
 
-  int spacing = 10;
-  int togWidth = h * 1.1f;
+  double togWidth = h * 1.1f;
+  double s = h * 0.25f;
 
   layout.setItemLayout(0, h, h, h);
-  layout.setItemLayout(1, spacing, spacing, spacing);
+  layout.setItemLayout(1, 0, s, s);
   layout.setItemLayout(2, togWidth, togWidth, togWidth);
-  layout.setItemLayout(3, spacing, spacing, spacing);
-  layout.setItemLayout(4, h, -1, -1);
+  layout.setItemLayout(3, 0, s, s);
+  layout.setItemLayout(4, 0, -1, -1);
 
   Component *comps[] = { icon, nullptr, toggle, nullptr, button };
   layout.layOutComponents(comps, 5, b.getX(), b.getY(), b.getWidth(), b.getHeight(), false, true);
@@ -293,6 +293,7 @@ void SettingsPageComponent::paint(Graphics &g) {
 }
 
 void SettingsPageComponent::resized() {
+  auto btnHeight = PokeLookAndFeel::getButtonHeight();
   auto bounds = getLocalBounds();
   int numRows = 3;
   double rowProp = 0.6/numRows;
@@ -310,17 +311,17 @@ void SettingsPageComponent::resized() {
     int numItems = sizeof(settingsItems) / sizeof(Component*);
     
     auto b = bounds;
-    b.setLeft(60);
-    b.setTop(30);
-    b.setHeight(b.getHeight() - 30);
-    b.setWidth(b.getWidth() - 60);
+    b.setLeft(btnHeight);
+    b.setTop(btnHeight/2.f);
+    b.setHeight(b.getHeight() - btnHeight/2.f);
+    b.setWidth(b.getWidth() - btnHeight);
     verticalLayout.layOutComponents(settingsItems, numItems, b.getX(), b.getY(), b.getWidth(),
                                     b.getHeight(), true, true);
   }
 
   mainPage->setBounds(bounds);
 
-  backButton->setBounds(bounds.getX(), bounds.getY(), 60, bounds.getHeight());
+  backButton->setBounds(bounds.getX(), bounds.getY(), btnHeight, bounds.getHeight());
 }
 
 void SettingsPageComponent::buttonClicked(Button *button) {

@@ -43,7 +43,7 @@ public:
   OwnedArray<DrawableImage> iconDrawableImages;
   ScopedPointer<ImageButton> nextPageBtn;
   ScopedPointer<ImageButton> prevPageBtn;
-  
+
   void resized() override;
   void checkShowPageNav();
   
@@ -53,9 +53,6 @@ public:
   
   void buttonStateChanged(Button*) override {};
   void buttonClicked(Button *button) override {};
-  
-  // FIXME: this is barsize from launcher component
-  double btnHeight = 50;
   
 private:
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppListComponent)
@@ -80,7 +77,6 @@ public:
 private:
   using AppRunningMap = HashMap<AppIconButton*, int>;
 
-  DrawableButton* appsLibraryBtn;
   LauncherComponent* launcherComponent;
   
   AppRunningMap runningAppsByButton;
@@ -90,7 +86,6 @@ private:
   void startApp(AppIconButton* appButton);
   void focusApp(AppIconButton* appButton, const String& windowId);
   void startOrFocusApp(AppIconButton* appButton);
-  void openAppsLibrary();
   
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppsPageComponent)
 };
