@@ -178,14 +178,7 @@ AppsPageComponent::AppsPageComponent(LauncherComponent* launcherComponent) :
 AppsPageComponent::~AppsPageComponent() {}
 
 Array<AppIconButton*> AppsPageComponent::createIconsFromJsonArray(const var &json) {
-  auto buttons = AppListComponent::createIconsFromJsonArray(json);
-  
-  // hard coded "virtual" application. Cannot be removed.
-  appLibraryBtn = createAndOwnIcon("App Get", "appIcons/install.png", String::empty);
-  buttons.add(appLibraryBtn);
-  checkShowPageNav();
-  
-  return buttons;
+  return AppListComponent::createIconsFromJsonArray(json);
 }
 
 void AppsPageComponent::startApp(AppIconButton* appButton) {
@@ -276,9 +269,6 @@ void AppsPageComponent::buttonClicked(Button *button) {
   else if (button == nextPageBtn) {
     grid->showNextPage();
     checkShowPageNav();
-  }
-  else if (button == appLibraryBtn) {
-    launcherComponent->openAppLibrary();
   }
   else {
     auto appButton = (AppIconButton*)button;

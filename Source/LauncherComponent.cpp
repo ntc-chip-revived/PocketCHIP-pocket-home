@@ -173,12 +173,6 @@ LauncherComponent::LauncherComponent(const var &configJson)
   pages.add(appsPage);
   pagesByName.set("Apps", appsPage);
   
-  // AppGet page
-  auto appLibrary = new LibraryPageComponent();
-  appLibrary->setName("AppLibrary");
-  pages.add(appLibrary);
-  pagesByName.set("AppLibrary", appLibrary);
-  
   // Read config for apps and corner locations
   auto pagesData = configJson["pages"].getArray();
   if (pagesData) {
@@ -189,22 +183,6 @@ LauncherComponent::LauncherComponent(const var &configJson)
         // add all items from config to our launch list
         const auto& appButtons = appsPage->createIconsFromJsonArray(page["items"]);
         for (auto button : appButtons) { button->setWantsKeyboardFocus(false); }
-        
-        // add all items from config to our install list
-        auto appsFile = assetFile("ntc-apps.json");
-        if (appsFile.exists()) {
-          auto appsJson = JSON::parse(appsFile);
-          if (appsJson) {
-            const auto& appLibBtns = appLibrary->createIconsFromJsonArray(appsJson);
-            for (auto button : appLibBtns) { button->setWantsKeyboardFocus(false); }
-          }
-          else {
-            std::cerr << "Could not parse installable applications list: " << appsFile.getFullPathName() << std::endl;
-          }
-        }
-        else {
-          std::cerr << "Missing installable applications list: " << appsFile.getFullPathName() << std::endl;
-        }
         
         // add corner buttons
         // FIXME: is there a better way to slice juce Array<var> ?
@@ -287,10 +265,6 @@ void LauncherComponent::hideLaunchSpinner() {
   DBG("Hide launch spinner");
   launchSpinnerTimer.stopTimer();
   launchSpinner->setVisible(false);
-}
-
-void LauncherComponent::openAppLibrary() {
-  getMainStack().pushPage(pagesByName["AppLibrary"], PageStackComponent::kTransitionTranslateHorizontalLeft);
 }
 
 void LauncherComponent::buttonClicked(Button *button) {

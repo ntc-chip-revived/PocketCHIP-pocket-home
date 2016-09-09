@@ -77,7 +77,6 @@ private:
   using AppRunningMap = HashMap<AppIconButton*, int>;
 
   LauncherComponent* launcherComponent;
-  AppIconButton* appLibraryBtn;
   
   AppRunningMap runningAppsByButton;
   AppCheckTimer runningCheckTimer;
